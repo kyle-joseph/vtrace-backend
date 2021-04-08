@@ -27,4 +27,4 @@ const EstablishmentsSchema = new mongoose.Schema({
     },
 })
 
-module.exports = mongoose.model("Establishment", EstablishmentsSchema)
+module.exports = mongoose.model("Establishments", EstablishmentsSchema)

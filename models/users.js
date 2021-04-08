@@ -22,7 +22,7 @@ const UsersSchema = new mongoose.Schema({
         required: true,
     },
     birthdate: {
-        type: Date,
+        type: String,
         required: true,
     },
     gender: {
@@ -39,4 +39,4 @@ const UsersSchema = new mongoose.Schema({
     },
 })
 
-module.exports = mongoose.model("User", UsersSchema)
+module.exports = mongoose.model("Users", UsersSchema)
