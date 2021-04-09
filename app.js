@@ -10,6 +10,7 @@ dotenv.config()
 
 var indexRouter = require("./routes/index")
 var usersRouter = require("./routes/user")
+var logsRouter = require("./routes/log")
 
 var app = express()
 
@@ -25,6 +26,7 @@ app.use(express.static(path.join(__dirname, "public")))
 
 app.use("/", indexRouter)
 app.use("/api/users", usersRouter)
+app.use("/api/logs", logsRouter)
 
 //connect to mongo atlas
 mongooseConnect.connect()
