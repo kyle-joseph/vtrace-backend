@@ -1,29 +1,28 @@
 const Users = require("../models/users")
 
-function getUser(id) {
-    Users.findOne({ userId: id })
-        .then((user) => {
-            return user
-        })
-        .catch((err) => console.log(err.message))
-}
-
-function getUserList(filter) {
-    Users.find(filter)
-        .then((users) => {
-            return users
-        })
-        .catch((err) => console.log(err.message))
+async function getUser(id) {
+    try {
+        const user = await Users.findOne({ userId: id })
+        if (user) return user
+        return null
+    } catch (err) {
+        console.log(err.message)
+        return null
+    }
 }
 
 async function createUser(data) {
-    const newUser = await Users.create(data)
-    if (newUser) return newUser
-    return null
+    try {
+        const newUser = await Users.create(data)
+        if (newUser) return newUser
+        return null
+    } catch (err) {
+        console.log(err.message)
+        return null
+    }
 }
 
 module.exports = {
     getUser,
-    getUserList,
     createUser,
 }
