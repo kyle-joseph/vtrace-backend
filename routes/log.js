@@ -4,7 +4,7 @@ const logs = require("../query/logs_query")
 
 // get all logs for admin (initial plan)
 router.get("/", async function (req, res) {
-    var allLogs = await logs.getUserLogs(req.body.userId)
+    var allLogs = await logs.getAllLogs()
     if (allLogs) return res.send({ success: true, allLogs: allLogs })
     res.send({ success: false })
 })

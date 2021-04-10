@@ -22,7 +22,7 @@ async function getUserLogs(id) {
     }
 }
 
-async function getLogsByEstablishment(id) {
+async function getEstablishmentLogs(id) {
     try {
         const establishmentLogs = await Logs.find({ establishmentId: id })
         if (establishmentLogs) return establishmentLogs
@@ -42,4 +42,11 @@ async function getAllLogs() {
         console.log(err.message)
         return null
     }
+}
+
+module.exports = {
+    createLog,
+    getUserLogs,
+    getEstablishmentLogs,
+    getAllLogs,
 }
