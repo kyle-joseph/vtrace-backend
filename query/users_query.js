@@ -1,4 +1,5 @@
 const Users = require("../models/users")
+const bcrypt = require("bcryptjs")
 
 async function getUser(id) {
     try {
@@ -12,8 +13,16 @@ async function getUser(id) {
 }
 
 async function createUser(data) {
+    var userData = data
+
+    //hash password of the new user using bcrypt
+    const hashedPassword = await bcrypt.hash(userData.password, 10)
+
+    //assign hashed password to userData.password
+    userData.password = hashedPassword
+
     try {
-        const newUser = await Users.create(data)
+        const newUser = await Users.create(userData)
         if (newUser) return newUser
         return null
     } catch (err) {
