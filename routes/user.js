@@ -7,14 +7,14 @@ const auth = require("../services/auth")
 router.get("/individual", async function (req, res, next) {
     var user = await users.getUser(req.body.userId)
     if (user) return res.send({ success: true, user: user })
-    res.send({ success: false })
+    res.status(404).send({ success: false })
 })
 
 //create new user
 router.post("/create", async function (req, res) {
     var newUser = await users.createUser(req.body)
     if (newUser)
-        return res.send({
+        return res.status(201).send({
             create_success: true,
             user: newUser,
         })
@@ -22,10 +22,12 @@ router.post("/create", async function (req, res) {
 })
 
 //user login
-router.post("/login", async function (req, res) {
+router.post("/login", auth.validateUserToken, async function (req, res) {
     var user = await auth.userLogin(req.body.userId, req.body.password)
-    console.log(user)
-    res.send(user)
+    if (!user.success) return res.status(406).send(user)
+
+    res.cookie("vtraceToken", user.token)
+    res.send({ success: user.success, user: user.user })
 })
 
 module.exports = router
