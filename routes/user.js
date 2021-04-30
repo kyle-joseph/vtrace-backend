@@ -36,4 +36,15 @@ router.post("/logout", async function (req, res) {
     res.send({ success: true, message: "User has been logged out." })
 })
 
+//update user
+router.put("/update", async function (req, res) {
+    var updatedUser = await users.updateUser(
+        req.body.userId,
+        req.body.updateData
+    )
+    if (updatedUser)
+        return res.send({ success: true, updatedUser: updatedUser })
+    return res.send({ success: false, message: "User not found" })
+})
+
 module.exports = router

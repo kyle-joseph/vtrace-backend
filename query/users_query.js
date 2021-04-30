@@ -31,7 +31,23 @@ async function createUser(data) {
     }
 }
 
+async function updateUser(userId, data) {
+    try {
+        const user = await getUser(userId)
+
+        if (user) {
+            const updatedUser = Users.updateOne({ userId: userId }, data)
+            return updatedUser
+        }
+        return null
+    } catch (err) {
+        console.log(err.message)
+        return null
+    }
+}
+
 module.exports = {
     getUser,
     createUser,
+    updateUser,
 }
