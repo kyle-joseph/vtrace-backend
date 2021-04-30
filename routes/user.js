@@ -30,4 +30,10 @@ router.post("/login", auth.validateUserToken, async function (req, res) {
     res.send({ success: user.success, user: user.user })
 })
 
+//user logout
+router.post("/logout", async function (req, res) {
+    res.clearCookie("vtraceToken")
+    res.send({ success: true, message: "User has been logged out." })
+})
+
 module.exports = router
