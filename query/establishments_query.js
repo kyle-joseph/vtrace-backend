@@ -1,8 +1,17 @@
 const Establishments = require("../models/establishments")
+const bcrypt = require("bcryptjs")
 
 async function createEstablishment(data) {
+    var establishmentData = data
+
+    //hash password of the new establishment using bcrypt
+    const hashedPassword = await bcrypt.hash(establishmentData.password, 10)
+
+    //assign hashed password to establishmentData.password
+    establishmentData.password = hashedPassword
+
     try {
-        var newEstablishment = await Establishments.create(data)
+        const newEstablishment = await Establishments.create(establishmentData)
         if (newEstablishment) return newEstablishment
         return null
     } catch (err) {
@@ -41,7 +50,7 @@ async function updateEstablishment(establishmentId, data) {
 
         if (establishment) {
             const updatedEstablishment = Establishments.updateOne(
-                { establishment: establishment },
+                { establishmentId: establishmentId },
                 data
             )
             return updatedEstablishment
