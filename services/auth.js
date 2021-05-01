@@ -1,4 +1,5 @@
 const Users = require("../models/users")
+const Establishments = require("../models/establishments")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 //Individual User Login
@@ -26,6 +27,42 @@ async function userLogin(id, password) {
         return { success: false, message: "An error occured." }
     }
 }
+async function userExists(id) {
+    try {
+        const user = await Users.findOne({ userId: id })
+        if (user) return user
+        return null
+    } catch (err) {
+        console.log(err.message)
+        return null
+    }
+}
+
+async function establishmentExists(id) {
+    const establishment = await Establishments.findOne({ establishmentId: id })
+}
+
+function loginValidateUserToken(req, res, next) {
+    try {
+        const { cookies } = req
+        if ("vtraceToken" in cookies) {
+            const verified = jwt.verify(
+                req.cookies["vtraceToken"],
+                process.env.SECRET_TOKEN
+            )
+            var exists = userExists(verified.userId)
+
+            if (exists)
+                return res.send({ success: true, userId: verified.userId })
+
+            res.send({ success: false, message: "User does not exists." })
+        }
+        next()
+    } catch (err) {
+        console.log(err.message)
+        res.send({ success: false, message: "Invalid token." })
+    }
+}
 
 function validateUserToken(req, res, next) {
     const { cookies } = req
@@ -38,5 +75,6 @@ function validateUserToken(req, res, next) {
 
 module.exports = {
     userLogin,
+    loginValidateUserToken,
     validateUserToken,
 }

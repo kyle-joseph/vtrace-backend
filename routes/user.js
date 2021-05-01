@@ -23,7 +23,7 @@ router.post("/create", async function (req, res) {
 })
 
 //user login
-router.post("/login", auth.validateUserToken, async function (req, res) {
+router.post("/login", auth.loginValidateUserToken, async function (req, res) {
     var user = await auth.userLogin(req.body.userId, req.body.password)
     if (!user.success) return res.status(406).send(user)
 
