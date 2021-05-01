@@ -65,12 +65,26 @@ function loginValidateUserToken(req, res, next) {
 }
 
 function validateUserToken(req, res, next) {
-    const { cookies } = req
-    if ("vtraceToken" in cookies)
-        return res
-            .status(202)
-            .send({ success: true, message: "Already logged in" })
-    next()
+    try {
+        const { cookies } = req
+        if ("vtraceToken" in cookies) {
+            const verified = jwt.verify(
+                req.cookies["vtraceToken"],
+                process.env.SECRET_TOKEN
+            )
+            var exists = userExists(verified.userId)
+
+            if (exists) {
+                next()
+            }
+
+            return res.send({ success: false, message: "Access denied." })
+        }
+        res.send({ success: false, message: "Access denied." })
+    } catch (err) {
+        console.log(err.message)
+        res.send({ success: false, message: "Invalid token." })
+    }
 }
 
 module.exports = {
