@@ -1,5 +1,6 @@
 var express = require("express")
 var router = express.Router()
+const bcrypt = require("bcryptjs")
 const users = require("../query/users_query")
 const auth = require("../services/auth")
 
@@ -42,6 +43,22 @@ router.put("/update", async function (req, res) {
         req.body.userId,
         req.body.updateData
     )
+    if (updatedUser)
+        return res.send({ success: true, updatedUser: updatedUser })
+    return res.send({ success: false, message: "User not found" })
+})
+
+//update user password
+router.put("/update-password", async function (req, res) {
+    //hash password of the new user using bcrypt
+    const hashedPassword = await bcrypt.hash(req.body.updateData.password, 10)
+    req.body.updateData.password = hashedPassword
+
+    var updatedUser = await users.updateUser(
+        req.body.userId,
+        req.body.updateData
+    )
+
     if (updatedUser)
         return res.send({ success: true, updatedUser: updatedUser })
     return res.send({ success: false, message: "User not found" })
