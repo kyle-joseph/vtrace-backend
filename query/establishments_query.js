@@ -35,8 +35,27 @@ async function getAllEstablishments() {
     }
 }
 
+async function updateEstablishment(establishmentId, data) {
+    try {
+        const establishment = await getEstablishment(establishmentId)
+
+        if (establishment) {
+            const updatedEstablishment = Establishments.updateOne(
+                { establishment: establishment },
+                data
+            )
+            return updatedEstablishment
+        }
+        return null
+    } catch (err) {
+        console.log(err.message)
+        return null
+    }
+}
+
 module.exports = {
     createEstablishment,
     getEstablishment,
     getAllEstablishments,
+    updateEstablishment,
 }

@@ -31,4 +31,18 @@ router.post("/create", async function (req, res) {
     res.send({ create_success: false })
 })
 
+//update establishment
+router.put("/update", async function (req, res) {
+    var updatedEstablishment = await establishments.updateEstablishment(
+        req.body.establishmentId,
+        req.body.updateData
+    )
+    if (updatedEstablishment)
+        return res.send({
+            success: true,
+            updatedEstablishment: updatedEstablishment,
+        })
+    return res.send({ success: false, message: "Establishment not found" })
+})
+
 module.exports = router
