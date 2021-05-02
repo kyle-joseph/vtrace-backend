@@ -1,6 +1,7 @@
 var express = require("express")
 var router = express.Router()
 const logs = require("../query/logs_query")
+const Logs = require("../models/logs")
 
 // get all logs for admin (initial plan)
 router.get("/", async function (req, res) {
@@ -35,6 +36,26 @@ router.post("/create", async function (req, res) {
             log: newLog,
         })
     res.send({ create_success: false })
+})
+
+//get latest logs
+router.get("/logs-date", async function (req, res) {
+    var date = new Date(req.body.dateTime.toString())
+    var tempDate = new Date(date)
+    var plusDate = new Date(tempDate.setDate(tempDate.getDate() + 1))
+
+    date = date.toISOString().substring(0, 10)
+    plusDate = plusDate.toISOString().substring(0, 10)
+
+    const estLogs = await Logs.find({
+        dateTime: {
+            $gte: date,
+            $lte: plusDate,
+        },
+    })
+
+    if (estLogs) return res.send({ logs: estLogs })
+    res.send({ success: false })
 })
 
 module.exports = router

@@ -11,7 +11,7 @@ const LogsSchema = new mongoose.Schema(
             required: true,
         },
         dateTime: {
-            type: String,
+            type: Date,
             required: true,
         },
     },
