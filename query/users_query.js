@@ -1,5 +1,6 @@
 const Users = require("../models/users")
 const bcrypt = require("bcryptjs")
+const idGenerator = require("../services/id_generator")
 
 async function getUser(id) {
     try {
@@ -20,6 +21,9 @@ async function createUser(data) {
 
     //assign hashed password to userData.password
     userData.password = hashedPassword
+
+    const userId = await idGenerator.userId()
+    userData.userId = userId
 
     try {
         const newUser = await Users.create(userData)
