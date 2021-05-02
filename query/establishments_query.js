@@ -1,5 +1,6 @@
 const Establishments = require("../models/establishments")
 const bcrypt = require("bcryptjs")
+const idGenerator = require("../services/id_generator")
 
 async function createEstablishment(data) {
     var establishmentData = data
@@ -9,6 +10,9 @@ async function createEstablishment(data) {
 
     //assign hashed password to establishmentData.password
     establishmentData.password = hashedPassword
+
+    const establishmentId = await idGenerator.establishmentId()
+    establishmentData.establishmentId = establishmentId
 
     try {
         const newEstablishment = await Establishments.create(establishmentData)
