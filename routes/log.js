@@ -12,18 +12,32 @@ router.get("/", async function (req, res) {
 
 // get user logs
 router.get("/individual-logs", async function (req, res) {
-    var userLogs = await logs.getAllLogs(req.body.userId)
-    if (userLogs) return res.send({ success: true, userLogs: userLogs })
+    var userLogs = await logs.getUserLogs(req.body.userId, req.body.dateTime)
+    if (userLogs) {
+        if (userLogs.length == 0)
+            return res.send({
+                success: false,
+                message: "No individual logs found.",
+            })
+        return res.send({ success: true, userLogs: userLogs })
+    }
     res.send({ success: false })
 })
 
 //get establishment logs
 router.get("/establishment-logs", async function (req, res) {
     var establishmentLogs = await logs.getEstablishmentLogs(
-        req.body.establishmentId
+        req.body.establishmentId,
+        req.body.dateTime
     )
-    if (establishmentLogs)
+    if (establishmentLogs) {
+        if (establishmentLogs.length == 0)
+            return res.send({
+                success: false,
+                message: "No establishment logs found.",
+            })
         return res.send({ success: true, establishmentLogs: establishmentLogs })
+    }
     res.send({ success: false })
 })
 
@@ -36,26 +50,6 @@ router.post("/create", async function (req, res) {
             log: newLog,
         })
     res.send({ create_success: false })
-})
-
-//get latest logs
-router.get("/logs-date", async function (req, res) {
-    var date = new Date(req.body.dateTime.toString())
-    var tempDate = new Date(date)
-    var plusDate = new Date(tempDate.setDate(tempDate.getDate() + 1))
-
-    date = date.toISOString().substring(0, 10)
-    plusDate = plusDate.toISOString().substring(0, 10)
-
-    const estLogs = await Logs.find({
-        dateTime: {
-            $gte: date,
-            $lte: plusDate,
-        },
-    })
-
-    if (estLogs) return res.send({ logs: estLogs })
-    res.send({ success: false })
 })
 
 module.exports = router

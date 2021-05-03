@@ -11,9 +11,23 @@ async function createLog(log) {
     }
 }
 
-async function getUserLogs(id) {
+async function getUserLogs(id, dateTime) {
     try {
-        const userLogs = await Logs.find({ userId: id })
+        var date = new Date(dateTime)
+        var tempDate = new Date(date)
+        date = new Date(date.setDate(date.getDate() - 13))
+        var plusDate = new Date(tempDate.setDate(tempDate.getDate() + 1))
+
+        date = date.toISOString().substring(0, 10)
+        plusDate = plusDate.toISOString().substring(0, 10)
+
+        const userLogs = await Logs.find({
+            userId: id,
+            dateTime: {
+                $gte: date,
+                $lte: plusDate,
+            },
+        })
         if (userLogs) return userLogs
         return null
     } catch (err) {
@@ -22,9 +36,22 @@ async function getUserLogs(id) {
     }
 }
 
-async function getEstablishmentLogs(id) {
+async function getEstablishmentLogs(id, dateTime) {
     try {
-        const establishmentLogs = await Logs.find({ establishmentId: id })
+        var date = new Date(dateTime)
+        var tempDate = new Date(date)
+        var plusDate = new Date(tempDate.setDate(tempDate.getDate() + 1))
+
+        date = date.toISOString().substring(0, 10)
+        plusDate = plusDate.toISOString().substring(0, 10)
+
+        const establishmentLogs = await Logs.find({
+            establishmentId: id,
+            dateTime: {
+                $gte: date,
+                $lte: plusDate,
+            },
+        })
         if (establishmentLogs) return establishmentLogs
         return null
     } catch (err) {
