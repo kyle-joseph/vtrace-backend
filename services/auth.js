@@ -153,7 +153,8 @@ function validateEstablishmentToken(req, res, next) {
             var exists = establishmentExists(verified.establishmentId)
 
             if (exists) {
-                next()
+                req.body.establishmentId = verified.establishmentId
+                return next()
             }
 
             return res.send({ success: false, message: "Access denied." })
@@ -177,7 +178,8 @@ function validateUserToken(req, res, next) {
             var exists = userExists(verified.userId)
 
             if (exists) {
-                next()
+                req.body.userId = verified.userId
+                return next()
             }
 
             return res.send({ success: false, message: "Access denied." })

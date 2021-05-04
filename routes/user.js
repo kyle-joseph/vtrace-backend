@@ -5,11 +5,15 @@ const users = require("../query/users_query")
 const auth = require("../services/auth")
 
 // get individual user by userId
-router.get("/individual", async function (req, res, next) {
-    var user = await users.getUser(req.body.userId)
-    if (user) return res.send({ success: true, user: user })
-    res.status(404).send({ success: false })
-})
+router.get(
+    "/individual",
+    auth.validateUserToken,
+    async function (req, res, next) {
+        var user = await users.getUser(req.body.userId)
+        if (user) return res.send({ success: true, user: user })
+        res.status(404).send({ success: false })
+    }
+)
 
 //create new user
 router.post("/create", async function (req, res) {
@@ -38,7 +42,7 @@ router.post("/logout", async function (req, res) {
 })
 
 //update user
-router.put("/update", async function (req, res) {
+router.put("/update", auth.validateUserToken, async function (req, res) {
     var updatedUser = await users.updateUser(
         req.body.userId,
         req.body.updateData
@@ -49,19 +53,26 @@ router.put("/update", async function (req, res) {
 })
 
 //update user password
-router.put("/update-password", async function (req, res) {
-    //hash password of the new user using bcrypt
-    const hashedPassword = await bcrypt.hash(req.body.updateData.password, 10)
-    req.body.updateData.password = hashedPassword
+router.put(
+    "/update-password",
+    auth.validateUserToken,
+    async function (req, res) {
+        //hash password of the new user using bcrypt
+        const hashedPassword = await bcrypt.hash(
+            req.body.updateData.password,
+            10
+        )
+        req.body.updateData.password = hashedPassword
 
-    var updatedUser = await users.updateUser(
-        req.body.userId,
-        req.body.updateData
-    )
+        var updatedUser = await users.updateUser(
+            req.body.userId,
+            req.body.updateData
+        )
 
-    if (updatedUser)
-        return res.send({ success: true, updatedUser: updatedUser })
-    return res.send({ success: false, message: "User not found" })
-})
+        if (updatedUser)
+            return res.send({ success: true, updatedUser: updatedUser })
+        return res.send({ success: false, message: "User not found" })
+    }
+)
 
 module.exports = router
