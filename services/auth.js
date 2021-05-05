@@ -166,6 +166,26 @@ function validateEstablishmentToken(req, res, next) {
     }
 }
 
+function validateEstablishmentTokenMobile(req, res, next) {
+    try {
+        const verified = jwt.verify(
+            req.body.vtestToken,
+            process.env.SECRET_TOKEN
+        )
+        var exists = establishmentExists(verified.establishmentId)
+
+        if (exists) {
+            req.body.establishmentId = verified.establishmentId
+            return next()
+        }
+
+        res.send({ success: false, message: "Access denied." })
+    } catch (err) {
+        console.log(err.message)
+        res.send({ success: false, message: "Invalid token." })
+    }
+}
+
 //middleware that validate user token when accessing establishment restricted routes
 function validateUserToken(req, res, next) {
     try {
@@ -198,4 +218,5 @@ module.exports = {
     establishmentLogin,
     loginValidateEstablishmentToken,
     validateEstablishmentToken,
+    validateEstablishmentTokenMobile,
 }

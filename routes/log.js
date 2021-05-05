@@ -54,18 +54,42 @@ router.get(
     }
 )
 
+//get establishment logs mobile
+router.get(
+    "/mobile-establishment-logs",
+    auth.validateEstablishmentTokenMobile,
+    async function (req, res) {
+        var establishmentLogs = await logs.getEstablishmentLogs(
+            req.body.establishmentId,
+            req.body.dateTime
+        )
+        if (establishmentLogs) {
+            if (establishmentLogs.length == 0)
+                return res.send({
+                    success: false,
+                    message: "No establishment logs found.",
+                })
+            return res.send({
+                success: true,
+                establishmentLogs: establishmentLogs,
+            })
+        }
+        res.send({ success: false })
+    }
+)
+
 //create new log
 router.post(
     "/create",
-    auth.validateEstablishmentToken,
+    auth.validateEstablishmentTokenMobile,
     async function (req, res) {
         var newLog = await logs.createLog(req.body)
         if (newLog)
             return res.send({
-                create_success: true,
+                success: true,
                 log: newLog,
             })
-        res.send({ create_success: false })
+        res.send({ success: false })
     }
 )
 

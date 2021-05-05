@@ -31,10 +31,10 @@ router.post("/create", async function (req, res) {
     var newEstablishment = await establishments.createEstablishment(req.body)
     if (newEstablishment)
         return res.send({
-            create_success: true,
+            success: true,
             newEstablishment: newEstablishment,
         })
-    res.send({ create_success: false })
+    res.send({ success: false })
 })
 
 //update establishment
@@ -95,6 +95,26 @@ router.post(
         res.send({
             success: establishment.success,
             establishment: establishment.establishment,
+        })
+    }
+)
+
+//establishment mobile app login
+router.post(
+    "/mobile-login",
+    auth.loginValidateEstablishmentToken,
+    async function (req, res) {
+        var estab = await auth.establishmentLogin(
+            req.body.establishmentId,
+            req.body.password
+        )
+        if (!estab.success) return res.status(406).send(estab)
+
+        res.send({
+            success: estab.success,
+            establishmentId: estab.establishment.establishmentId,
+            establishmentName: estab.establishment.establishmentName,
+            vtestToken: estab.token,
         })
     }
 )
