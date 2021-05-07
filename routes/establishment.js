@@ -30,7 +30,7 @@ router.get(
 router.post("/create", async function (req, res) {
     var newEstablishment = await establishments.createEstablishment(req.body)
     if (newEstablishment)
-        return res.send({
+        return res.status(201).send({
             success: true,
             newEstablishment: newEstablishment,
         })
@@ -108,9 +108,9 @@ router.post(
             req.body.establishmentId,
             req.body.password
         )
-        if (!estab.success) return res.status(406).send(estab)
+        if (!estab.success) return res.send(estab)
 
-        res.send({
+        res.status(200).send({
             success: estab.success,
             establishmentId: estab.establishment.establishmentId,
             establishmentName: estab.establishment.establishmentName,
