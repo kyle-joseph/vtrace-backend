@@ -1,9 +1,19 @@
 const Logs = require("../models/logs")
+const Users = require("../models/users")
+const Establishments = require("../models/establishments")
 
 async function createLog(log) {
     try {
-        var newLog = await Logs.create(log)
-        if (newLog) return newLog
+        var user = await Users.findOne({userId: log.userId})
+        var establishment = await Establishments.findOne({establishmentId: log.establishmentId})
+
+        if(user && establishment){
+            log.user = user._id
+            log.establishment = establishment._id
+            var newLog = await Logs.create(log)
+            if (newLog) return newLog
+        }
+
         return null
     } catch (err) {
         console.log(err.message)
@@ -51,7 +61,7 @@ async function getEstablishmentLogs(id, dateTime) {
                 $gte: date,
                 $lte: plusDate,
             },
-        })
+        }).populate({path: 'user', select: ['firstname', 'lastname', 'gender', 'address', 'contactNumber']})
         if (establishmentLogs) return establishmentLogs
         return null
     } catch (err) {

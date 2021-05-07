@@ -2,6 +2,8 @@ const mongoose = require("mongoose")
 
 const LogsSchema = new mongoose.Schema(
     {
+        user: {type: mongoose.Schema.Types.ObjectId, ref: 'Users'},
+        establishment: {type: mongoose.Schema.Types.ObjectId, ref: 'Establishments'},
         userId: {
             type: String,
             required: true,
