@@ -89,7 +89,7 @@ router.post(
                 success: true,
                 log: newLog,
             })
-        res.send({ success: false })
+        res.send({ success: false, message: 'Failed to create log.' })
     }
 )
 

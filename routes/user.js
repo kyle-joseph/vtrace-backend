@@ -15,6 +15,17 @@ router.get(
     }
 )
 
+// get individual user by userId
+router.post(
+    "/mobile-individual",
+    auth.validateEstablishmentTokenMobile,
+    async function (req, res, next) {
+        var user = await users.getUser(req.body.userId)
+        if (user) return res.send({ success: true })
+        res.send({ success: false, message: 'Invalid QR Code' })
+    }
+)
+
 //create new user
 router.post("/create", async function (req, res) {
     var newUser = await users.createUser(req.body)
