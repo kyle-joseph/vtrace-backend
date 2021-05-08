@@ -31,7 +31,7 @@ router.get(
 )
 
 //get establishment logs
-router.get(
+router.post(
     "/establishment-logs",
     auth.validateEstablishmentToken,
     async function (req, res) {
@@ -55,7 +55,7 @@ router.get(
 )
 
 //get establishment logs mobile
-router.get(
+router.post(
     "/mobile-establishment-logs",
     auth.validateEstablishmentTokenMobile,
     async function (req, res) {
