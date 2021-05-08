@@ -4,10 +4,12 @@ const Establishments = require("../models/establishments")
 
 async function createLog(log) {
     try {
-        var user = await Users.findOne({userId: log.userId})
-        var establishment = await Establishments.findOne({establishmentId: log.establishmentId})
+        var user = await Users.findOne({ userId: log.userId })
+        var establishment = await Establishments.findOne({
+            establishmentId: log.establishmentId,
+        })
 
-        if(user && establishment){
+        if (user && establishment) {
             log.user = user._id
             log.establishment = establishment._id
             var newLog = await Logs.create(log)
@@ -61,13 +63,53 @@ async function getEstablishmentLogs(id, dateTime) {
                 $gte: date,
                 $lte: plusDate,
             },
-        }).populate({path: 'user', select: ['firstname', 'lastname', 'gender', 'address', 'contactNumber']})
-        if (establishmentLogs) return establishmentLogs
+        })
+            .sort("-dateTime")
+            .populate({
+                path: "user",
+                select: [
+                    "firstname",
+                    "lastname",
+                    "gender",
+                    "address",
+                    "contactNumber",
+                ],
+            })
+        if (establishmentLogs) {
+            var estLogs = splitUserDateTime(establishmentLogs)
+            return estLogs
+        }
         return null
     } catch (err) {
         console.log(err.message)
         return null
     }
+}
+
+function splitUserDateTime(logs) {
+    var newLogs = []
+    logs.forEach((element) => {
+        var dateTime = new Date(element.dateTime)
+        var date =
+            dateTime.getUTCFullYear() +
+            "-" +
+            (dateTime.getUTCMonth() + 1) +
+            "-" +
+            dateTime.getUTCDate()
+        var time = dateTime.getUTCHours() + ":" + dateTime.getUTCMinutes()
+
+        newLogs.push({
+            userId: element.userId,
+            firstname: element.user.firstname,
+            lastname: element.user.lastname,
+            gender: element.user.gender,
+            contactNumber: element.user.contactNumber,
+            address: element.user.address,
+            date: date,
+            time: time,
+        })
+    })
+    return newLogs
 }
 
 async function getAllLogs() {
