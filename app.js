@@ -4,6 +4,7 @@ var path = require("path")
 var cookieParser = require("cookie-parser")
 var logger = require("morgan")
 var dotenv = require("dotenv")
+var cors = require("cors")
 var mongooseConnect = require("./services/connection")
 
 dotenv.config()
@@ -14,6 +15,13 @@ var logsRouter = require("./routes/log")
 var establishmentsRouter = require("./routes/establishment")
 
 var app = express()
+
+app.use(
+    cors({
+        credentials: true,
+        origin: "http://localhost:3002",
+    })
+)
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"))

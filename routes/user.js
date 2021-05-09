@@ -22,7 +22,7 @@ router.post(
     async function (req, res, next) {
         var user = await users.getUser(req.body.userId)
         if (user) return res.send({ success: true })
-        res.send({ success: false, message: 'Invalid QR Code' })
+        res.send({ success: false, message: "Invalid QR Code" })
     }
 )
 
@@ -40,14 +40,14 @@ router.post("/create", async function (req, res) {
 //user login
 router.post("/login", auth.loginValidateUserToken, async function (req, res) {
     var user = await auth.userLogin(req.body.userId, req.body.password)
-    if (!user.success) return res.status(406).send(user)
+    if (!user.success) return res.send(user)
 
     res.cookie("vtraceToken", user.token)
     res.send({ success: user.success, user: user.user })
 })
 
 //user logout
-router.post("/logout", async function (req, res) {
+router.get("/logout", async function (req, res) {
     res.clearCookie("vtraceToken")
     res.send({ success: true, message: "User has been logged out." })
 })
