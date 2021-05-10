@@ -5,7 +5,7 @@ const users = require("../query/users_query")
 const auth = require("../services/auth")
 
 // get individual user by userId
-router.get(
+router.post(
     "/individual",
     auth.validateUserToken,
     async function (req, res, next) {
