@@ -71,8 +71,11 @@ async function getEstablishmentLogs(id, dateTime) {
                     "firstname",
                     "lastname",
                     "gender",
-                    "address",
                     "contactNumber",
+                    "street",
+                    "barangay",
+                    "cityMun",
+                    "province",
                 ],
             })
         if (establishmentLogs) {
@@ -89,6 +92,7 @@ async function getEstablishmentLogs(id, dateTime) {
 function splitUserDateTime(logs) {
     var newLogs = []
     logs.forEach((element) => {
+        var address = ""
         var dateTime = new Date(element.dateTime)
         var date =
             dateTime.getUTCFullYear() +
@@ -97,14 +101,30 @@ function splitUserDateTime(logs) {
             "-" +
             dateTime.getUTCDate()
         var time = dateTime.getUTCHours() + ":" + dateTime.getUTCMinutes()
-
+        if (element.user.street != "") {
+            address =
+                element.user.street +
+                ", " +
+                element.user.barangay +
+                ", " +
+                element.user.cityMun +
+                ", " +
+                element.user.province
+        } else {
+            address =
+                element.user.barangay +
+                ", " +
+                element.user.cityMun +
+                ", " +
+                element.user.province
+        }
         newLogs.push({
             userId: element.userId,
             firstname: element.user.firstname,
             lastname: element.user.lastname,
             gender: element.user.gender,
             contactNumber: element.user.contactNumber,
-            address: element.user.address,
+            address: address,
             date: date,
             time: time,
         })

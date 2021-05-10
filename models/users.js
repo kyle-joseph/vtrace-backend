@@ -34,7 +34,18 @@ const UsersSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        address: {
+        street: {
+            type: String,
+        },
+        barangay: {
+            type: String,
+            required: true,
+        },
+        cityMun: {
+            type: String,
+            required: true,
+        },
+        province: {
             type: String,
             required: true,
         },

@@ -30,11 +30,11 @@ router.post(
 router.post("/create", async function (req, res) {
     var newUser = await users.createUser(req.body)
     if (newUser)
-        return res.status(201).send({
-            create_success: true,
+        return res.status(200).send({
+            success: true,
             user: newUser,
         })
-    res.send({ create_success: false })
+    res.send({ success: false, message: "Failed to create user." })
 })
 
 //user login
