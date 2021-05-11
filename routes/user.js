@@ -10,7 +10,27 @@ router.post(
     auth.validateUserToken,
     async function (req, res, next) {
         var user = await users.getUser(req.body.userId)
-        if (user) return res.send({ success: true, user: user })
+        if (user) {
+            return res.send({ success: true, user: user })
+        }
+        res.status(404).send({ success: false })
+    }
+)
+
+router.post(
+    "/password-matched",
+    auth.validateUserToken,
+    async function (req, res, next) {
+        var user = await users.getUser(req.body.userId)
+        if (user) {
+            var password = req.body.password
+            const validPassword = await bcrypt.compare(password, user.password)
+            if (validPassword) return res.send({ success: true })
+            return res.send({
+                success: false,
+                message: "Old Password does not match.",
+            })
+        }
         res.status(404).send({ success: false })
     }
 )
@@ -60,7 +80,7 @@ router.put("/update", auth.validateUserToken, async function (req, res) {
     )
     if (updatedUser)
         return res.send({ success: true, updatedUser: updatedUser })
-    return res.send({ success: false, message: "User not found" })
+    return res.send({ success: false, message: "Failed to update user." })
 })
 
 //update user password
@@ -82,7 +102,7 @@ router.put(
 
         if (updatedUser)
             return res.send({ success: true, updatedUser: updatedUser })
-        return res.send({ success: false, message: "User not found" })
+        return res.send({ success: false, message: "Failed to update user." })
     }
 )
 
