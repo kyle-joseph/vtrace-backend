@@ -23,11 +23,35 @@ async function createLog(log) {
     }
 }
 
+// async function getUserLogs(id, dateTime) {
+//     try {
+//         var date = new Date(dateTime)
+//         var tempDate = new Date(date)
+//         date = new Date(date.setDate(date.getDate() - 13))
+//         var plusDate = new Date(tempDate.setDate(tempDate.getDate() + 1))
+
+//         date = date.toISOString().substring(0, 10)
+//         plusDate = plusDate.toISOString().substring(0, 10)
+
+//         const userLogs = await Logs.find({
+//             userId: id,
+//             dateTime: {
+//                 $gte: date,
+//                 $lte: plusDate,
+//             },
+//         })
+//         if (userLogs) return userLogs
+//         return null
+//     } catch (err) {
+//         console.log(err.message)
+//         return null
+//     }
+// }
+
 async function getUserLogs(id, dateTime) {
     try {
         var date = new Date(dateTime)
         var tempDate = new Date(date)
-        date = new Date(date.setDate(date.getDate() - 13))
         var plusDate = new Date(tempDate.setDate(tempDate.getDate() + 1))
 
         date = date.toISOString().substring(0, 10)
@@ -39,6 +63,9 @@ async function getUserLogs(id, dateTime) {
                 $gte: date,
                 $lte: plusDate,
             },
+        }).populate({
+            path: "establishment",
+            select: ["establishmentName"],
         })
         if (userLogs) return userLogs
         return null
@@ -64,6 +91,7 @@ async function getEstablishmentLogs(id, dateTime) {
                 $lte: plusDate,
             },
         })
+            .populate()
             .sort("-dateTime")
             .populate({
                 path: "user",
@@ -90,6 +118,17 @@ async function getEstablishmentLogs(id, dateTime) {
 }
 
 function splitUserDateTime(logs) {
+    const formatAMPM = (date) => {
+        var hours = date.getUTCHours()
+        var minutes = date.getUTCMinutes()
+        var ampm = hours >= 12 ? "PM" : "AM"
+        hours = hours % 12
+        hours = hours ? hours : 12
+        minutes = minutes < 10 ? "0" + minutes : minutes
+        var strTime = hours + ":" + minutes + " " + ampm
+        return strTime
+    }
+
     var newLogs = []
     logs.forEach((element) => {
         var address = ""
@@ -100,7 +139,7 @@ function splitUserDateTime(logs) {
             (dateTime.getUTCMonth() + 1) +
             "-" +
             dateTime.getUTCDate()
-        var time = dateTime.getUTCHours() + ":" + dateTime.getUTCMinutes()
+        var time = formatAMPM(dateTime)
         if (element.user.street != "") {
             address =
                 element.user.street +

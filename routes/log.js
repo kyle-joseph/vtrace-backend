@@ -10,7 +10,7 @@ router.get("/", async function (req, res) {
 })
 
 // get user logs
-router.get(
+router.post(
     "/individual-logs",
     auth.validateUserToken,
     async function (req, res) {
@@ -89,7 +89,7 @@ router.post(
                 success: true,
                 log: newLog,
             })
-        res.send({ success: false, message: 'Failed to create log.' })
+        res.send({ success: false, message: "Failed to create log." })
     }
 )
 
