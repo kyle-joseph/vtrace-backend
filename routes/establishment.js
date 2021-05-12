@@ -13,7 +13,7 @@ router.get("/", auth.validateEstablishmentToken, async function (req, res) {
 })
 
 // get establishment by id
-router.get(
+router.post(
     "/individual",
     auth.validateEstablishmentToken,
     async function (req, res) {
@@ -30,11 +30,11 @@ router.get(
 router.post("/create", async function (req, res) {
     var newEstablishment = await establishments.createEstablishment(req.body)
     if (newEstablishment)
-        return res.status(201).send({
+        return res.status(200).send({
             success: true,
-            newEstablishment: newEstablishment,
+            establishment: newEstablishment,
         })
-    res.send({ success: false })
+    res.send({ success: false, message: "Failed to create establishment." })
 })
 
 //update establishment
@@ -89,7 +89,7 @@ router.post(
             req.body.establishmentId,
             req.body.password
         )
-        if (!establishment.success) return res.status(406).send(establishment)
+        if (!establishment.success) return res.send(establishment)
 
         res.cookie("vtraceEstToken", establishment.token)
         res.send({
@@ -120,7 +120,7 @@ router.post(
 )
 
 //establishment logout
-router.post("/logout", async function (req, res) {
+router.get("/logout", async function (req, res) {
     res.clearCookie("vtraceEstToken")
     res.send({ success: true, message: "Establishment has been logged out." })
 })
