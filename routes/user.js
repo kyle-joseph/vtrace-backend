@@ -13,7 +13,7 @@ router.post(
         if (user) {
             return res.send({ success: true, user: user })
         }
-        res.status(404).send({ success: false })
+        res.send({ success: false })
     }
 )
 

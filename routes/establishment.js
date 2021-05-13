@@ -125,4 +125,26 @@ router.get("/logout", async function (req, res) {
     res.send({ success: true, message: "Establishment has been logged out." })
 })
 
+router.post(
+    "/password-matched",
+    auth.validateEstablishmentToken,
+    async function (req, res, next) {
+        var establishment = await establishments.getEstablishment(
+            req.body.establishmentId
+        )
+        if (establishment) {
+            var password = req.body.password
+            const validPassword = await bcrypt.compare(
+                password,
+                establishment.password
+            )
+            if (validPassword) return res.send({ success: true })
+            return res.send({
+                success: false,
+                message: "Old Password does not match.",
+            })
+        }
+        res.status(404).send({ success: false })
+    }
+)
 module.exports = router

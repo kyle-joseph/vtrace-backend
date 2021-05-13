@@ -10,12 +10,12 @@ async function userLogin(id, password) {
 
         //check if user exists
         if (!user)
-            return { success: false, message: "Invalid username or password." }
+            return { success: false, message: "Invalid User ID or password." }
 
         //validate and compare entered password and the hashed password
         const validPassword = await bcrypt.compare(password, user.password)
         if (!validPassword)
-            return { success: false, message: "Invalid username or password." }
+            return { success: false, message: "Invalid User ID or password." }
 
         const token = jwt.sign(
             { userId: user.userId },
@@ -38,7 +38,10 @@ async function establishmentLogin(id, password) {
 
         //check if establishment exists
         if (!establishment)
-            return { success: false, message: "Invalid username or password." }
+            return {
+                success: false,
+                message: "Invalid Establishment ID or password.",
+            }
 
         //validate and compare entered password and the hashed password
         const validPassword = await bcrypt.compare(
@@ -47,7 +50,10 @@ async function establishmentLogin(id, password) {
         )
 
         if (!validPassword)
-            return { success: false, message: "Invalid username or password." }
+            return {
+                success: false,
+                message: "Invalid Establishment ID or password.",
+            }
 
         const token = jwt.sign(
             { establishmentId: establishment.establishmentId },
