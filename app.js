@@ -11,6 +11,7 @@ dotenv.config()
 
 var indexRouter = require("./routes/index")
 var usersRouter = require("./routes/user")
+var adminRouter = require("./routes/admin")
 var logsRouter = require("./routes/log")
 var establishmentsRouter = require("./routes/establishment")
 
@@ -35,6 +36,7 @@ app.use(express.static(path.join(__dirname, "public")))
 
 app.use("/", indexRouter)
 app.use("/api/users", usersRouter)
+app.use("/api/admin", adminRouter)
 app.use("/api/logs", logsRouter)
 app.use("/api/establishments", establishmentsRouter)
 

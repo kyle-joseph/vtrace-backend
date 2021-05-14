@@ -24,7 +24,19 @@ async function establishmentId() {
     return id
 }
 
+async function adminId() {
+    const nanoid = customAlphabet("1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ", 9)
+    var id = "VTADM" + nanoid()
+    const establishment = await Establishments.findOne({ establishmentId: id })
+
+    if (establishment) {
+        return establishmentId()
+    }
+    return id
+}
+
 module.exports = {
     userId,
     establishmentId,
+    adminId,
 }
