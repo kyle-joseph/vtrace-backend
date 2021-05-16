@@ -43,4 +43,9 @@ router.get("/logout", async function (req, res) {
     res.send({ success: true, message: "Admin has been logged out." })
 })
 
+router.get("/admin-logs", auth.validateAdminToken, async function (req, res) {
+    var adminLogs = await admins.getAdminLogs()
+    if (adminLogs) return res.send({ success: true, adminLogs: adminLogs })
+    res.send({ success: false, message: "No recent logins." })
+})
 module.exports = router

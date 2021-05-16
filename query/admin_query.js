@@ -1,4 +1,5 @@
 const Admins = require("../models/admins")
+const AdminActivityLog = require("../models/adminActivity")
 const bcrypt = require("bcryptjs")
 const idGenerator = require("../services/id_generator")
 
@@ -50,8 +51,22 @@ async function updateAdmin(adminId, data) {
     }
 }
 
+async function getAdminLogs() {
+    try {
+        var adminLogs = await AdminActivityLog.find({})
+            .sort("-dateTime")
+            .limit(4)
+        if (adminLogs) return adminLogs
+        return null
+    } catch (err) {
+        console.log(err.message)
+        return null
+    }
+}
+
 module.exports = {
     getAdmin,
     createAdmin,
     updateAdmin,
+    getAdminLogs,
 }

@@ -1,4 +1,5 @@
 const Admins = require("../models/admins")
+const AdminActivityLog = require("../models/adminActivity")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 
@@ -20,6 +21,11 @@ async function adminLogin(id, password) {
             { username: admin.username },
             process.env.SECRET_TOKEN
         )
+
+        await AdminActivityLog.create({
+            username: admin.username,
+            dateTime: new Date(Date.now()).toISOString(),
+        })
 
         return { success: true, admin: admin, token: token }
     } catch (err) {
