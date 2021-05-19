@@ -65,7 +65,7 @@ async function getAdminLogs() {
     }
 }
 
-async function getAdminUserLogs(dateTime) {
+async function getAdminUserLogs(dateTime, match) {
     try {
         var date = new Date(dateTime)
         var tempDate = new Date(date)
@@ -74,7 +74,7 @@ async function getAdminUserLogs(dateTime) {
         date = date.toISOString().substring(0, 10)
         plusDate = plusDate.toISOString().substring(0, 10)
 
-        const adminUserLogs = await Logs.find({
+        var adminUserLogs = await Logs.find({
             dateTime: {
                 $gte: date,
                 $lte: plusDate,
@@ -89,12 +89,30 @@ async function getAdminUserLogs(dateTime) {
                 select: ["firstname", "lastname"],
             },
         ])
+
+        adminUserLogs = matchSearch(adminUserLogs, match)
+
         if (adminUserLogs) return adminUserLogs
         return null
     } catch (err) {
         console.log(err.message)
         return null
     }
+}
+
+function matchSearch(logs, match) {
+    var adminUserLogs = []
+    var reg = new RegExp(match, "i")
+
+    logs.map((value) => {
+        var firstname = value.user.firstname
+        var lastname = value.user.lastname
+
+        if (reg.test(firstname) || reg.test(lastname)) {
+            adminUserLogs.push(value)
+        }
+    })
+    return adminUserLogs
 }
 
 module.exports = {

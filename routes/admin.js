@@ -53,8 +53,11 @@ router.post(
     "/admin-user-logs",
     auth.validateAdminToken,
     async function (req, res) {
-        var adminUserLogs = await admins.getAdminUserLogs(req.body.dateTime)
-        if (adminUserLogs)
+        var adminUserLogs = await admins.getAdminUserLogs(
+            req.body.dateTime,
+            req.body.match
+        )
+        if (adminUserLogs && adminUserLogs.length !== 0)
             return res.send({ success: true, adminUserLogs: adminUserLogs })
         res.send({ success: false, message: "No logs in this date." })
     }
