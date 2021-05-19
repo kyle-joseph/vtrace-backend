@@ -48,4 +48,15 @@ router.get("/admin-logs", auth.validateAdminToken, async function (req, res) {
     if (adminLogs) return res.send({ success: true, adminLogs: adminLogs })
     res.send({ success: false, message: "No recent logins." })
 })
+
+router.post(
+    "/admin-user-logs",
+    auth.validateAdminToken,
+    async function (req, res) {
+        var adminUserLogs = await admins.getAdminUserLogs(req.body.dateTime)
+        if (adminUserLogs)
+            return res.send({ success: true, adminUserLogs: adminUserLogs })
+        res.send({ success: false, message: "No logs in this date." })
+    }
+)
 module.exports = router

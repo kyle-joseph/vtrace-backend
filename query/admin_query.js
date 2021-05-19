@@ -1,5 +1,6 @@
 const Admins = require("../models/admins")
 const AdminActivityLog = require("../models/adminActivity")
+const Logs = require("../models/logs")
 const bcrypt = require("bcryptjs")
 const idGenerator = require("../services/id_generator")
 
@@ -64,9 +65,42 @@ async function getAdminLogs() {
     }
 }
 
+async function getAdminUserLogs(dateTime) {
+    try {
+        var date = new Date(dateTime)
+        var tempDate = new Date(date)
+        var plusDate = new Date(tempDate.setDate(tempDate.getDate() + 1))
+
+        date = date.toISOString().substring(0, 10)
+        plusDate = plusDate.toISOString().substring(0, 10)
+
+        const adminUserLogs = await Logs.find({
+            dateTime: {
+                $gte: date,
+                $lte: plusDate,
+            },
+        }).populate([
+            {
+                path: "establishment",
+                select: ["establishmentName"],
+            },
+            {
+                path: "user",
+                select: ["firstname", "lastname"],
+            },
+        ])
+        if (adminUserLogs) return adminUserLogs
+        return null
+    } catch (err) {
+        console.log(err.message)
+        return null
+    }
+}
+
 module.exports = {
     getAdmin,
     createAdmin,
     updateAdmin,
     getAdminLogs,
+    getAdminUserLogs,
 }
