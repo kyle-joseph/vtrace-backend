@@ -1,6 +1,7 @@
 const Admins = require("../models/admins")
 const AdminActivityLog = require("../models/adminActivity")
 const Logs = require("../models/logs")
+const Establishments = require("../models/establishments")
 const bcrypt = require("bcryptjs")
 const idGenerator = require("../services/id_generator")
 
@@ -65,6 +66,20 @@ async function getAdminLogs() {
     }
 }
 
+async function getAdminEstablishments(match) {
+    try {
+        var establishments = await Establishments.find({})
+
+        establishments = matchEstablishmentSearch(establishments, match)
+
+        if (establishments) return establishments
+        return null
+    } catch (err) {
+        console.log(err.message)
+        return null
+    }
+}
+
 async function getAdminUserLogs(dateTime, match) {
     try {
         var date = new Date(dateTime)
@@ -100,6 +115,18 @@ async function getAdminUserLogs(dateTime, match) {
     }
 }
 
+function matchEstablishmentSearch(est, match) {
+    var establishments = []
+    var reg = new RegExp(match, "i")
+
+    est.map((value) => {
+        if (reg.test(value.establishmentName)) {
+            establishments.push(value)
+        }
+    })
+    return adminUserLogs
+}
+
 function matchSearch(logs, match) {
     var adminUserLogs = []
     var reg = new RegExp(match, "i")
@@ -121,4 +148,5 @@ module.exports = {
     updateAdmin,
     getAdminLogs,
     getAdminUserLogs,
+    getAdminEstablishments,
 }

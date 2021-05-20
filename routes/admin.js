@@ -62,4 +62,21 @@ router.post(
         res.send({ success: false, message: "No logs in this date." })
     }
 )
+
+router.post(
+    "/admin-establishments",
+    auth.validateAdminToken,
+    async function (req, res) {
+        var adminEstablishments = await admins.getAdminEstablishments(
+            req.body.dateTime,
+            req.body.match
+        )
+        if (adminEstablishments && adminEstablishments.length !== 0)
+            return res.send({
+                success: true,
+                adminEstablishments: adminEstablishments,
+            })
+        res.send({ success: false, message: "Establishment does not exists." })
+    }
+)
 module.exports = router
