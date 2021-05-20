@@ -68,7 +68,6 @@ router.post(
     auth.validateAdminToken,
     async function (req, res) {
         var adminEstablishments = await admins.getAdminEstablishments(
-            req.body.dateTime,
             req.body.match
         )
         if (adminEstablishments && adminEstablishments.length !== 0)

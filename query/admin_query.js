@@ -71,6 +71,7 @@ async function getAdminEstablishments(match) {
         var establishments = await Establishments.find({})
 
         establishments = matchEstablishmentSearch(establishments, match)
+        console.log(establishments)
 
         if (establishments) return establishments
         return null
@@ -121,10 +122,32 @@ function matchEstablishmentSearch(est, match) {
 
     est.map((value) => {
         if (reg.test(value.establishmentName)) {
-            establishments.push(value)
+            var address = ""
+            if (value.street != "") {
+                address =
+                    value.street +
+                    ", " +
+                    value.barangay +
+                    ", " +
+                    value.cityMun +
+                    ", " +
+                    value.province
+            } else {
+                address =
+                    value.barangay +
+                    ", " +
+                    value.cityMun +
+                    ", " +
+                    value.province
+            }
+            establishments.push({
+                establishmentId: value.establishmentId,
+                establishmentName: value.establishmentName,
+                address: address,
+            })
         }
     })
-    return adminUserLogs
+    return establishments
 }
 
 function matchSearch(logs, match) {
