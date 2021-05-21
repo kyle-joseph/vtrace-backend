@@ -18,14 +18,27 @@ router.post(
 )
 
 //create new user
-router.post("/create", async function (req, res) {
+router.post("/create", auth.validateAdminToken, async function (req, res) {
     var newAdmin = await admins.createAdmin(req.body)
     if (newAdmin)
         return res.status(200).send({
             success: true,
             admin: newAdmin,
         })
-    res.send({ success: false, message: "Failed to create admin." })
+    res.send({ success: false, message: "Failed to create new admin." })
+})
+
+router.post("/update", auth.validateAdminToken, async function (req, res) {
+    var editAdmin = await admins.updateAdmin(
+        req.body.username,
+        req.body.password
+    )
+    if (editAdmin)
+        return res.status(200).send({
+            success: true,
+            admin: editAdmin,
+        })
+    res.send({ success: false, message: "Failed to update admin password." })
 })
 
 //user login
@@ -92,4 +105,14 @@ router.post(
         res.send({ success: false, message: "No logs as of now." })
     }
 )
+
+router.get("/admin-list", auth.validateAdminToken, async function (req, res) {
+    var adminList = await admins.getAllAdmin()
+    if (adminList)
+        return res.send({
+            success: true,
+            adminList: adminList,
+        })
+    res.send({ success: false, message: "No there are no admins registered." })
+})
 module.exports = router

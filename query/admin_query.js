@@ -16,6 +16,17 @@ async function getAdmin(id) {
     }
 }
 
+async function getAllAdmin() {
+    try {
+        const admin = await Admins.find({})
+        if (admin) return admin
+        return null
+    } catch (err) {
+        console.log(err.message)
+        return null
+    }
+}
+
 async function createAdmin(data) {
     var adminData = data
 
@@ -38,12 +49,16 @@ async function createAdmin(data) {
     }
 }
 
-async function updateAdmin(adminId, data) {
+async function updateAdmin(username, password) {
     try {
-        const admin = await getAdmin(adminId)
+        const admin = await getAdmin(username)
 
         if (admin) {
-            const updatedAdmin = Admins.updateOne({ adminId: adminId }, data)
+            const hashedPassword = await bcrypt.hash(password, 10)
+            const updatedAdmin = Admins.updateOne(
+                { username: username },
+                { password: hashedPassword }
+            )
             return updatedAdmin
         }
         return null
@@ -91,7 +106,6 @@ async function getAdminEstablishments(match) {
         var establishments = await Establishments.find({})
 
         establishments = matchEstablishmentSearch(establishments, match)
-        console.log(establishments)
 
         if (establishments) return establishments
         return null
@@ -193,4 +207,5 @@ module.exports = {
     getAdminUserLogs,
     getAdminEstablishments,
     getScanCount,
+    getAllAdmin,
 }
