@@ -66,6 +66,26 @@ async function getAdminLogs() {
     }
 }
 
+async function getScanCount(dateTime) {
+    try {
+        var date = new Date(dateTime)
+        var tempDate = new Date(date)
+        var plusDate = new Date(tempDate.setDate(tempDate.getDate() + 1))
+
+        var count = await Logs.count({
+            dateTime: {
+                $gte: date,
+                $lte: plusDate,
+            },
+        })
+        if (count) return count
+        return null
+    } catch (err) {
+        console.log(err.message)
+        return null
+    }
+}
+
 async function getAdminEstablishments(match) {
     try {
         var establishments = await Establishments.find({})
@@ -172,4 +192,5 @@ module.exports = {
     getAdminLogs,
     getAdminUserLogs,
     getAdminEstablishments,
+    getScanCount,
 }

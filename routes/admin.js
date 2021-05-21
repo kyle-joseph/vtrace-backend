@@ -78,4 +78,18 @@ router.post(
         res.send({ success: false, message: "Establishment does not exists." })
     }
 )
+
+router.post(
+    "/admin-scan-count",
+    auth.validateAdminToken,
+    async function (req, res) {
+        var count = await admins.getScanCount(req.body.dateTime)
+        if (count)
+            return res.send({
+                success: true,
+                count: count,
+            })
+        res.send({ success: false, message: "No logs as of now." })
+    }
+)
 module.exports = router
