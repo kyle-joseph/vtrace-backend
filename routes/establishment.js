@@ -98,7 +98,7 @@ router.post(
             domain: "https://kyle-joseph.github.io",
             secure: true,
             httpOnly: true,
-            sameSite: false,
+            sameSite: "none",
             expires: new Date(expire.setDate(expire.getDate() + 365)),
         })
         res.send({
