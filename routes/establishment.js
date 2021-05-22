@@ -95,7 +95,7 @@ router.post(
 
         res.cookie("vtraceEstToken", establishment.token, {
             path: "/",
-            domain: "https://vtrace-backend.herokuapp.com/",
+            domain: "https://kyle-joseph.github.io",
             secure: true,
             httpOnly: true,
             sameSite: false,

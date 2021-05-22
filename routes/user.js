@@ -66,7 +66,7 @@ router.post("/login", auth.loginValidateUserToken, async function (req, res) {
 
     res.cookie("vtraceToken", user.token, {
         path: "/",
-        domain: "https://vtrace-backend.herokuapp.com/",
+        domain: "https://kyle-joseph.github.io",
         secure: true,
         httpOnly: true,
         sameSite: false,
