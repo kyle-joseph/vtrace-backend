@@ -65,6 +65,9 @@ router.post("/login", auth.loginValidateUserToken, async function (req, res) {
     var expire = new Date()
 
     res.cookie("vtraceToken", user.token, {
+        path: "/",
+        secure: true,
+        httpOnly: true,
         expires: new Date(expire.setDate(expire.getDate() + 365)),
     })
     res.send({ success: user.success, user: user.user })

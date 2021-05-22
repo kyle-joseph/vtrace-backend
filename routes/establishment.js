@@ -94,6 +94,9 @@ router.post(
         var expire = new Date()
 
         res.cookie("vtraceEstToken", establishment.token, {
+            path: "/",
+            secure: true,
+            httpOnly: true,
             expires: new Date(expire.setDate(expire.getDate() + 365)),
         })
         res.send({
