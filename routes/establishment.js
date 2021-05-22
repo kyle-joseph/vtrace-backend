@@ -96,8 +96,8 @@ router.post(
         res.cookie("vtraceEstToken", establishment.token, {
             path: "/",
             domain: "https://kyle-joseph.github.io",
-            secure: false,
-            httpOnly: false,
+            secure: true,
+            httpOnly: true,
             sameSite: false,
             expires: new Date(expire.setDate(expire.getDate() + 365)),
         })
