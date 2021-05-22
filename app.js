@@ -20,7 +20,10 @@ var app = express()
 // Add headers
 app.use(function (req, res, next) {
     // Website you wish to allow to connect
-    res.setHeader("Access-Control-Allow-Origin", "*")
+    res.setHeader(
+        "Access-Control-Allow-Origin",
+        "https://kyle-joseph.github.io"
+    )
 
     // Request methods you wish to allow
     res.setHeader(
