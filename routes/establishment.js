@@ -91,7 +91,11 @@ router.post(
         )
         if (!establishment.success) return res.send(establishment)
 
-        res.cookie("vtraceEstToken", establishment.token)
+        var expire = new Date()
+
+        res.cookie("vtraceEstToken", establishment.token, {
+            expires: new Date(expire.setDate(expire.getDate() + 365)),
+        })
         res.send({
             success: establishment.success,
             establishment: establishment.establishment,
