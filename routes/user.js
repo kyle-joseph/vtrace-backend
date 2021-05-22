@@ -68,7 +68,6 @@ router.post("/login", auth.loginValidateUserToken, async function (req, res) {
         path: "/",
         secure: true,
         httpOnly: true,
-        sameSite: "none",
         expires: new Date(expire.setDate(expire.getDate() + 365)),
     })
     res.send({ success: user.success, user: user.user })
