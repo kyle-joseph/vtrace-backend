@@ -20,7 +20,11 @@ var app = express()
 app.use(
     cors({
         credentials: true,
-        origin: ["http://localhost:3000", "http://localhost:3002"],
+        origin: [
+            "http://localhost:3000",
+            "http://localhost:3002",
+            "https://kyle-joseph.github.io/fast-trace/",
+        ],
     })
 )
 
