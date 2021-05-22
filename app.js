@@ -17,8 +17,6 @@ var establishmentsRouter = require("./routes/establishment")
 
 var app = express()
 
-app.enable("trust proxy")
-
 // Add headers
 app.use(function (req, res, next) {
     // Website you wish to allow to connect
