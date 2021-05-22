@@ -30,7 +30,7 @@ router.post("/create", auth.validateAdminToken, async function (req, res) {
 
 router.post("/update", auth.validateAdminToken, async function (req, res) {
     var editAdmin = await admins.updateAdmin(
-        req.body.username,
+        req.body.editUsername,
         req.body.password
     )
     if (editAdmin)

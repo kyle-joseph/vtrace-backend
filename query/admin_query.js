@@ -55,6 +55,7 @@ async function updateAdmin(username, password) {
 
         if (admin) {
             const hashedPassword = await bcrypt.hash(password, 10)
+
             const updatedAdmin = Admins.updateOne(
                 { username: username },
                 { password: hashedPassword }
