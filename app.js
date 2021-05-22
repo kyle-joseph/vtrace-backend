@@ -45,6 +45,8 @@ var app = express()
 //     next()
 // })
 
+app.enable("trust proxy")
+
 app.use(
     cors({
         credentials: true,
