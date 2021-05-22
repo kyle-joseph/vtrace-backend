@@ -69,7 +69,7 @@ router.post("/login", auth.loginValidateUserToken, async function (req, res) {
         domain: "https://kyle-joseph.github.io",
         secure: true,
         httpOnly: true,
-        sameSite: "none",
+        sameSite: "lax",
         expires: new Date(expire.setDate(expire.getDate() + 365)),
     })
     res.send({ success: user.success, user: user.user })
