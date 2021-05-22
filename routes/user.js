@@ -66,10 +66,6 @@ router.post("/login", auth.loginValidateUserToken, async function (req, res) {
 
     res.cookie("vtraceToken", user.token, {
         path: "/",
-        domain: "https://kyle-joseph.github.io",
-        secure: true,
-        httpOnly: true,
-        sameSite: "lax",
         expires: new Date(expire.setDate(expire.getDate() + 365)),
     })
     res.send({ success: user.success, user: user.user })
