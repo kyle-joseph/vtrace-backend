@@ -42,16 +42,16 @@ app.use(function (req, res, next) {
     next()
 })
 
-app.use(
-    cors({
-        credentials: true,
-        origin: [
-            "http://localhost:3000",
-            "http://localhost:3002",
-            "https://kyle-joseph.github.io/fast-trace/",
-        ],
-    })
-)
+// app.use(
+//     cors({
+//         credentials: true,
+//         origin: [
+//             "http://localhost:3000",
+//             "http://localhost:3002",
+//             "https://kyle-joseph.github.io/fast-trace/",
+//         ],
+//     })
+// )
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"))
