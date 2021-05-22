@@ -97,6 +97,7 @@ router.post(
             path: "/",
             secure: true,
             httpOnly: true,
+            sameSite: "none",
             expires: new Date(expire.setDate(expire.getDate() + 365)),
         })
         res.send({
