@@ -46,8 +46,8 @@ router.post("/login", auth.loginValidateAdminToken, async function (req, res) {
     var admin = await auth.adminLogin(req.body.username, req.body.password)
     if (!admin.success) return res.send(admin)
 
-    res.cookie("vtraceAdminToken", admin.token)
-    res.send({ success: admin.success, admin: admin.admin })
+    // res.cookie("vtraceAdminToken", admin.token)
+    res.send({ success: admin.success, admin: admin.admin, token: admin.token })
 })
 
 //user logout

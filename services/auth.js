@@ -97,10 +97,9 @@ async function establishmentExists(id) {
 //only for login
 function loginValidateUserToken(req, res, next) {
     try {
-        const { cookies } = req
-        if ("vtraceToken" in cookies) {
+        if (req.headers.auth_token !== "null") {
             const verified = jwt.verify(
-                req.cookies["vtraceToken"],
+                req.headers.auth_token,
                 process.env.SECRET_TOKEN
             )
             var exists = userExists(verified.userId)
@@ -121,10 +120,9 @@ function loginValidateUserToken(req, res, next) {
 //only for login
 function loginValidateEstablishmentToken(req, res, next) {
     try {
-        const { cookies } = req
-        if ("vtraceEstToken" in cookies) {
+        if (req.headers.auth_token !== "null") {
             const verified = jwt.verify(
-                req.cookies["vtraceEstToken"],
+                req.headers.auth_token,
                 process.env.SECRET_TOKEN
             )
             var exists = establishmentExists(verified.establishmentId)
@@ -150,10 +148,9 @@ function loginValidateEstablishmentToken(req, res, next) {
 //middleware that validate establishment token when accessing individual restricted routes
 function validateEstablishmentToken(req, res, next) {
     try {
-        const { cookies } = req
-        if ("vtraceEstToken" in cookies) {
+        if (req.headers.auth_token !== "null") {
             const verified = jwt.verify(
-                req.cookies["vtraceEstToken"],
+                req.headers.auth_token,
                 process.env.SECRET_TOKEN
             )
             var exists = establishmentExists(verified.establishmentId)
@@ -195,10 +192,9 @@ function validateEstablishmentTokenMobile(req, res, next) {
 //middleware that validate user token when accessing establishment restricted routes
 function validateUserToken(req, res, next) {
     try {
-        const { cookies } = req
-        if ("vtraceToken" in cookies) {
+        if (req.headers.auth_token !== "null") {
             const verified = jwt.verify(
-                req.cookies["vtraceToken"],
+                req.headers.auth_token,
                 process.env.SECRET_TOKEN
             )
             var exists = userExists(verified.userId)

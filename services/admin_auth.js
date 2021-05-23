@@ -50,10 +50,9 @@ async function adminExists(id) {
 //only for login
 function loginValidateAdminToken(req, res, next) {
     try {
-        const { cookies } = req
-        if ("vtraceAdminToken" in cookies) {
+        if (req.headers.auth_token !== "null") {
             const verified = jwt.verify(
-                req.cookies["vtraceAdminToken"],
+                req.headers.auth_token,
                 process.env.SECRET_TOKEN
             )
             var exists = adminExists(verified.username)
@@ -73,10 +72,9 @@ function loginValidateAdminToken(req, res, next) {
 //middleware that validate user token when accessing establishment restricted routes
 function validateAdminToken(req, res, next) {
     try {
-        const { cookies } = req
-        if ("vtraceAdminToken" in cookies) {
+        if (req.headers.auth_token !== "null") {
             const verified = jwt.verify(
-                req.cookies["vtraceAdminToken"],
+                req.headers.auth_token,
                 process.env.SECRET_TOKEN
             )
             var exists = adminExists(verified.username)
