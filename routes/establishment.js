@@ -108,7 +108,7 @@ router.post(
 //establishment mobile app login
 router.post(
     "/mobile-login",
-    auth.loginValidateEstablishmentToken,
+    // auth.loginValidateEstablishmentToken,
     async function (req, res) {
         var estab = await auth.establishmentLogin(
             req.body.establishmentId,
