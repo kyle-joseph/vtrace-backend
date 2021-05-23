@@ -93,13 +93,14 @@ router.post(
 
         var expire = new Date()
 
-        res.cookie("vtraceEstToken", establishment.token, {
-            path: "/",
-            expires: new Date(expire.setDate(expire.getDate() + 365)),
-        })
+        // res.cookie("vtraceEstToken", establishment.token, {
+        //     path: "/",
+        //     expires: new Date(expire.setDate(expire.getDate() + 365)),
+        // })
         res.send({
             success: establishment.success,
             establishment: establishment.establishment,
+            token: establishment.token,
         })
     }
 )
