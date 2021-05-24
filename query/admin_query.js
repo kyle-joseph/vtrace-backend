@@ -84,10 +84,9 @@ async function getAdminLogs() {
 
 async function getScanCount(dateTime) {
     try {
-        var date = new Date(dateTime)
+        var date = new Date(dateTime.slice(0, 10))
         var tempDate = new Date(date)
         var plusDate = new Date(tempDate.setDate(tempDate.getDate() + 1))
-
         var count = await Logs.count({
             dateTime: {
                 $gte: date,
